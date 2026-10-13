@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b30">
+  <meta name="description" content="A private team preference poll for the 26 BizzNNovate 2026 auction companies.">
+  <title>BizzNNovate • Team Company Poll</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="companies.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell nav-inner">
+      <a class="identity" href="#top" aria-label="BizzNNovate poll home"><span class="brand-mark">B<span class="mark-dot">.</span></span><span class="identity-text"><strong>BizzNNovate</strong><small>2026 · COMPANY AUCTION</small></span></a>
+      <nav class="nav-tabs" aria-label="Main navigation"><button class="tab-btn active" data-view="vote">Vote</button><button class="tab-btn" data-view="results">Results <span id="voteCountPill" class="tiny-count">0</span></button><button class="tab-btn" data-view="how">How it works</button></nav>
+      <span id="connectionBadge" class="connection waiting"><span class="status-dot"></span>Checking setup</span>
+    </div>
+  </header>
+
+  <main id="top" class="shell">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy"><div class="eyebrow">TEAM DECISION ROOM / OCT 2026</div><h1 id="heroTitle">One team.<br><em>One company.</em><br>Your vote.</h1><p>Choose and rank up to <strong>10 companies</strong> you want us to bid for. You can choose fewer. Rank #1 is your favourite.</p><div class="hero-meta"><span><b>26</b> businesses</span><span><b>₹1Cr</b> virtual budget</span><span><b>14 OCT</b> auction (tentative)</span></div></div>
+      <div class="hero-side"><div class="ring" aria-hidden="true"><div class="ring-inner">TOP<span>10</span></div></div><p>For the team.<br><strong>Not for the hype.</strong></p><div class="rule">Vote → Compare → Bid</div></div>
+    </section>
+
+    <div id="setupNotice" class="setup-banner" hidden><div><strong>Preview mode — shared voting not connected.</strong><p>The design works now. To collect votes from different phones, configure Supabase using the README before deploying.</p></div><span class="setup-icon" aria-hidden="true">!</span></div>
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <section id="view-vote" class="view active">
+      <div class="section-title"><div><span class="eyebrow green">01 / VOTING BALLOT</span><h2>Pick your companies</h2><p>Tap <strong>Add to my list</strong>, then use the arrows to set your preference order.</p></div><button id="resultsShortcut" class="text-link">See team results <span aria-hidden="true">→</span></button></div>
+      <div class="layout">
+        <div class="catalog-col">
+          <div class="filter-panel"><label class="field"><span>Search companies</span><input id="searchInput" placeholder="Search name or product…" autocomplete="off" aria-label="Search companies"></label><label class="field"><span>Category</span><select id="sectorFilter" aria-label="Company category"><option value="all">All industries</option><option value="Food">Food & drinks</option><option value="Fitness">Health & fitness</option><option value="Lifestyle">Fashion & lifestyle</option></select></label><label class="field"><span>Likely interest</span><select id="heatFilter" aria-label="Likely auction interest"><option value="all">All companies</option><option value="High">Likely popular</option><option value="Medium">Medium demand</option><option value="Low">Potentially overlooked</option></select></label></div>
+          <div class="legend"><span id="shownCount">26 companies</span><span><i class="legend-dot popular"></i>Popular and <i class="legend-dot sleeper"></i>overlooked are <b>estimates</b>, not auction facts.</span></div>
+          <div id="companyGrid" class="company-grid" aria-live="polite"></div>
+        </div>
+        <aside class="ballot-card" aria-label="Your voting ballot"><div class="ballot-top"><span class="eyebrow green">YOUR RANKED LIST</span><div class="selection-number"><span id="selectedCount">0</span><span class="of-ten"> / 10</span></div><div class="progress"><span id="progressBar"></span></div><p>You may submit anywhere from 1 to 10 choices. The order matters.</p></div>
+          <div class="voter-block"><label for="voterSelect">Who is voting?</label><select id="voterSelect"><option value="">Choose your first name</option><option>Shreyas</option><option>Shantanu</option><option>Paranjay</option><option>Jeet</option><option>Govind</option><option>Rahul</option><option>Ruaplee</option><option>Srishti</option><option>Moksha</option><option>Arya</option><option>Rajnandini</option><option>Jalaj</option><option value="__other">Other — type a name</option></select><input id="customName" maxlength="40" placeholder="Write your first name" autocomplete="given-name" hidden><p class="hint">One ballot per name. You can edit yours from the same browser.</p></div>
+          <ol id="rankedList" class="ranked-list"><li class="empty-list">No companies selected yet.<br>Choose your favourites below.</li></ol>
+          <div class="ballot-footer"><button id="submitVote" class="primary-btn" disabled>Submit my vote <span aria-hidden="true">↗</span></button><button id="clearDraft" class="quiet-btn">Clear draft</button><p class="privacy-note">Team poll only · No email or surname needed</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-results" class="view"><div class="section-title"><div><span class="eyebrow green">02 / TEAM RESULTS</span><h2>What does the team want?</h2><p>Live count of submitted ballots. Results are shared, not stored only on your phone.</p></div><button id="refreshResults" class="soft-btn">↻ Refresh results</button></div><div class="results-overview"><div class="stat-box"><span>Ballots received</span><strong id="ballotsReceived">—</strong><small>One per member name</small></div><div class="stat-box"><span>Companies receiving votes</span><strong id="companiesVoted">—</strong><small>Across all 26</small></div><div class="stat-box"><span>Most popular choice</span><strong id="topCompany">—</strong><small>By ranked-vote points</small></div></div><div class="results-grid"><div class="leaderboard panel"><div class="panel-head"><h3>Top companies</h3><p>#1 = 10 points, #2 = 9 … #10 = 1</p></div><div id="leaderboardRows" class="leaderboard-rows"><p class="loading">Connect the database to view real votes.</p></div></div><div class="participation panel"><div class="panel-head"><h3>Who's voted?</h3><p>First names only · Updated when you refresh</p></div><div id="participationList" class="people-list"></div><p class="disclaimer">Results are team preferences—not real auction odds, company valuations or judge scores.</p></div></div></section>
+
+    <section id="view-how" class="view"><div class="section-title"><div><span class="eyebrow green">03 / QUICK GUIDE</span><h2>How we decide</h2><p>A simple process for tomorrow's auction meeting.</p></div></div><div class="guide-grid"><article class="guide-card"><span>01</span><h3>Choose your name</h3><p>Select your first name, or choose <strong>Other</strong> to type a name.</p></article><article class="guide-card"><span>02</span><h3>Rank up to ten</h3><p>Add 1–10 companies and move them up or down. Put your strongest choice first.</p></article><article class="guide-card"><span>03</span><h3>Submit once</h3><p>Tap Submit. You can adjust your own vote later from the same browser.</p></article><article class="guide-card"><span>04</span><h3>Discuss the results</h3><p>Use the team ranking to pick a shortlist. Agree on a maximum company bid and leave capital for the rally.</p></article></div><div class="rules-panel"><h3>Remember these auction rules</h3><p><strong>₹1 crore virtual money.</strong> Bids increase by ₹5 lakh. Only 3 representatives may place bids. Your company bid and rally entry-order bid use the same budget. Confirm all current procedures with the organizers.</p><p class="source">Based on the BizzNNovate 2026 dossier, team rulebook, event guide and auction rules. Brand banners are sourced from the company dossier.</p></div></section>
+  </main>
+  <footer class="footer shell"><span>BizzNNovate 2026 / Team poll</span><span>Built for internal team decision-making · Not an official event voting platform</span></footer>
+  <dialog id="detailDialog" class="detail-dialog"><div class="dialog-top"><strong>COMPANY SNAPSHOT</strong><button id="closeDetails" aria-label="Close company details">×</button></div><div id="detailContents"></div></dialog>
+</body></html>
